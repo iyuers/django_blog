@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% endblock %}
+
+{% block css %}
+		<link href="{% static 'css/reglogin.css' %}" rel='stylesheet' type='text/css' />
+{% endblock %}
+
+
+{% block body %}
+	<div class="main">
+		<div class="header" >
+			<h1>Login!</h1>
+		</div>
+		<p></p>
+			<form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+				<ul class="right-form">
+					<h2>Login:</h2>
+					<li><input type="text" placeholder="Username" name="username" required/></li>
+					<li><input type="password" placeholder="Password" name="password" required/></li>
+                    <input type="hidden" name="source" value="{{ request.META.HTTP_REFERER }}">
+					<input type="submit" value="Login" name="submit">
+					<div class="clear"> </div>
+				</ul>
+				<div class="clear"> </div>
+
+			</form>
+	</div>
+{% endblock %}

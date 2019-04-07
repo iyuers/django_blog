@@ -1,0 +1,41 @@
+{% block pagination %}
+    <div class="component">
+        <ul class="pagination justify-content-center">
+            {% if page_items.has_previous %}
+                <li class="page-item">
+                    <a href="?page={{  page_items.previous_page_number }}{% if request.GET.year %}&year={{ year }}{% endif %}{% if request.GET.month %}&month={{ month }}{% endif %}" class="page-link ">
+                        &laquo;上一页
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">&laquo;上一页</a>
+                </li>
+            {% endif %}
+
+            {% for n in page_list %}
+                {% if page_items.number == forloop.counter %}
+                <li class="page-item active">
+                    <a href="?page={{ forloop.counter }}{% if request.GET.year %}&year={{ year }}{% endif %}{% if request.GET.month %}&month={{ month }}{% endif %}" class="page-link">{{ forloop.counter }}</a>
+                </li>
+                {% else %}
+                    <li class="page-item">
+                        <a href="?page={{ forloop.counter }}{% if request.GET.year %}&year={{ year }}{% endif %}{% if request.GET.month %}&month={{ month }}{% endif %}" class="page-link">{{ forloop.counter }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_items.has_next%}
+                <li class="page-item">
+                    <a href="?page={{ page_items.next_page_number }}{% if request.GET.year %}&year={{ year }}{% endif %}{% if request.GET.month %}&month={{ month }}{% endif %}" class="page-link">
+                        下一页 &raquo;
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">下一页 &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}

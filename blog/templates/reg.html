@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="component">
+        <div class="modal d-block" id="modal-demo">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header"><p class="modal-title">注册：</p></div>
+                    <form action="{% url 'register' %}" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body d-flex flex-column">
+                        {% csrf_token %}
+                        {{ userform.username }}
+                        {{ userform.password }}
+                        {{ userform.email }}
+                        {{ userform.url }}
+                        <span>上传头像图片：</span>
+                        {{ userform.avatar }}
+                        <input type="hidden" name="source" value="{{ request.META.HTTP_REFERER }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">注册</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

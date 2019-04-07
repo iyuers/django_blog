@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block ad %}
+{% include 'ad.html' %}
+{% endblock %}
+
+{% block content %}
+        <!-- banner代码 结束 -->
+        <div class="topnews">
+          <h2>最新文章</h2>
+            {% for article in page_items %}
+              <div class="blogs">
+                <ul>
+                  <h3><a href="{% url 'article' %}?id={{ article.id }}">{{ article.title }}</a></h3>
+                  <div class="ml-5"><p>{{ article.content | safe }}</p></div>
+                  <p class="autor">
+                      <span class="lm f_l">
+                          {% for tag in article.tag.all %}
+                              <a href="/">{{ tag }}</a> &nbsp;
+                          {% endfor %}
+                      </span>
+                      <span class="dtime f_l">{{ article.data_publish | date:'Y-m-d' }}</span>
+                      <span class="viewnum f_r">
+                          浏览（<a href="/">{{ article.click_count }}</a>）
+                      </span>
+                      <span class="pingl f_r">
+                          评论（<a href="/">{{ article.comment_set.all.count }}</a>）
+                      </span>
+                  </p>
+                </ul>
+              </div>
+            {% endfor %}
+        </div>
+
+{% endblock %}
+
+
+{% block pagination %}
+    {% include 'pagination.html' %}
+{% endblock %}
+
+
+
+
+
+
+

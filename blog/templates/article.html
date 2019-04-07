@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load datefilter %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static '/css/avatar.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="postdate">
+      <div class="month text-center" style="height: 20px; line-height: 20px;">{{ get_article.data_publish | month_to_upper }}</div>
+      <div class="date text-center">{{ get_article.data_publish |date:'d' }}</div>
+    </div>
+
+    <div class="">
+        <h2><a href="http://www.baidu.org/?p=542" rel="bookmark" title="{{ get_article.title }}">{{ get_article.title }}</a></h2>
+        <div class="postmeta">
+          <span class="postmeta_author">{{ get_article.user.username }}</span>
+          <span class="postmeta_category"><a href="http://www.baidu.org/?cat=14" rel="category">{{ get_article.category.name }}</a></span>
+          <span class="postmeta_time">{{ get_article.data_publish | date:"Y-m-d" }}</span>
+        </div><!-- end postmeta -->
+        <div class="dropdown-divider"></div>
+        <div class="entry">
+            <div class="border border-secondary p-3 rounded bg-light">
+          {{ get_article.content | safe }}
+            </div>
+        </div>
+        <span class="tags">{% for tag in get_article.tag.all %}<a href="http://www.baidu.org/?tag=android" rel="tag">{{ tag }}</a>{% endfor %}</span>
+        <div class="info">
+        Address:  <a href="http://www.baidu.org/?p=542" rel="bookmark" title="Announcement: java  开发相关下载(定期更新中)">http://www.baidu.org/?p=542</a>
+      </div>
+
+      <div class="commentstitle">
+          <span class="trackback">
+              <a href="http://www.baidu.org/wp-trackback.php?p=542" rel="trackback" title="Trackback URI"></a>
+          </span>
+          <h3 id="comments"><span class="commentsnumber">{{ get_article.comment_set.count }} comment</span> untill now</h3>
+      </div>
+
+    <!-- 添加评论内容 -->
+{% for comment in comment_list %}
+    <div class="component border bd-news p-3 rounded">
+
+    <div class="media">
+        {% if comment.user %}
+            <img src="{{ MEDIA_URL }}{{ comment.user.avatar }}" alt="" class="mr-3 img-thumbnail rounded-circle">
+        {% else %}
+            <img src="/uploads/avatar/default.jpg" alt="" class="mr-3 img-thumbnail rounded-circle">
+        {% endif %}
+        <div class="media-body">
+            <h5 class="mt-0">
+                <a href='http://www.yopoing.com' rel='external nofollow' class='url'>{{ comment.user.username }}</a>
+                <span class="time"> @ <a href="#comment-59418" title="">{{ comment.data_publish }}</a></span>
+            </h5>
+            <div class="bg-light">{{ comment.content|safe }}</div>
+
+            {% for comment_child in comment.children_comment %}
+                <div class="dropdown-divider"></div>
+                <div class="media mt-3">
+                    <a href="#" class="mr-3">
+                        {% if comment_child.user %}
+                            <img src="{{ MEDIA_URL }}{{ comment_child.user.avatar }}" alt="" class="mr-3 img-thumbnail rounded-circle">
+                        {% else %}
+                            <img src="/uploads/avatar/default.jpg" alt="" class="mr-3">
+                        {% endif %}
+                    </a>
+                    <div class="media-body">
+                        <h5 class="mt-0">
+                            <a href='http://www.yopoing.com' rel='external nofollow' class='url'>{{ comment_child.user.username }}</a>
+                            <span class="time"> @ <a href="#comment-59418" title="">{{ comment_child.data_publish }}</a></span>
+                        </h5>
+                        {{ comment_child.content |safe }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+{% endfor %}
+
+    <div id="commentform">
+        <h3 id="respond">Add your comment now</h3>
+        {% if request.user.is_authenticated %}
+            <p>欢迎回来 {{ request.user.username }}! 请写出自己的想法。</p>
+        {% else %}
+        <div class='login_info'>还没有登陆？可以登录后再评论哦。>
+            <big><a href="{% url 'login' %}">&raquo;去登录</a>&nbsp;<a href="{% url 'register' %}">&raquo;去注册</a></big>
+        </div>
+        {% endif %}
+        <div class="border border-secondary p-3 rounded bg-light">
+        <form action="{% url 'comment_post' %}" method="POST">
+            <div class="d-flex flex-column">
+            {% csrf_token %}
+                <span>用户名:</span>
+            {{ comment_form.username }}
+                <span>email:</span>
+            {{ comment_form.email }}
+                <span>个人网页地址:</span>
+            {{ comment_form.url }}
+                <span>评论：</span>
+            {{ comment_form.content }}
+            </div>
+
+            <input type="hidden" value="{{ get_article.id }}" name="article_id">
+            <input type="hidden" value="{{ request.user }}" name="user">
+            <button class="btn btn-primary">提交评论</button>
+        </form>
+        </div>
+
+    </div>
+    </div>
+{% endblock %}

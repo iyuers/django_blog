@@ -1,0 +1,268 @@
+{% load staticfiles %}
+{% load cache %}
+<!doctype html>
+<html>
+
+    {% block head %}
+        <head>
+
+            {% block meta %}
+                <meta charset="utf-8">
+                <meta name="keywords" content="" />
+                <meta name="description" content="" />
+            {% endblock %}
+
+            <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
+
+            {% block css %}
+                <link href='{% static "css/base.css" %}' rel="stylesheet">
+                <link href='{% static "bootstrap/css/bootstrap.css" %}' rel="stylesheet">
+                <link href='{% static "css/index.css" %}' rel="stylesheet">
+            {% endblock %}
+            {% block custom_css %}{% endblock %}
+
+            {% block js %}
+                <script type="text/javascript" src='{% static "js/jquery-3.3.1.min.js" %}'></script>
+                <script type="text/javascript" src='{% static "js/popper.min.js" %}'></script>
+                 <script type="text/javascript" src='{% static "bootstrap/js/bootstrap.js" %}'></script>
+                 <script type="text/javascript" src='{% static "bootstrap/js/bootstrap.bundle.js" %}'></script>
+                <!--[if lt IE 9]>
+                <script src="js/modernizr.js"></script>
+                <![endif]-->
+                <!--
+                <script src="{% static 'js/nav.js' %}"></script>
+                -->
+                <script type="text/javascript" src='{% static "js/sliders.js" %}'></script>
+
+            {% endblock %}
+            {% block custom_js %}{% endblock %}
+
+        </head>
+    {% endblock %}
+
+    {% cache 500 sidebar %}
+    {% block body %}
+        <body>
+
+            <div class="container">
+
+                <div class="row">
+                <div class="col-12 mb-3">
+
+                <!--导航栏-->
+                {% block nav %}
+
+                      <div class="logo d-flex justify-content-between ">
+                        <div class="w-75 f_l">
+                          <h1>{{ SITE_NAME }}</h1>
+                          <p>{{ SITE_DESC }}</p>
+                        </div>
+                        {% if request.user.is_authenticated %}
+                            <div class="d-flex justify-content-end align-items-end" style="height: 100px">
+                                <div class="d-flex align-items-center">
+                                    <img class="img-thumbnail rounded-circle" src="{{ MEDIA_URL }}{{ request.user.avatar }}" style="width:50px; height:50px; object-fit: cover;">
+
+                                    <div class="ml-2">
+                                        <span>{{ request.user.username }}</span> | <a href="{% url 'logout' %}">退出登录</a>
+                                    </div>
+                                </div>
+                            </div>
+                      {% else %}
+                            <div>
+                            <span><a href="{% url 'login' %}">登录</a></span> | <span><a href="{% url 'register' %}">注册</a></span>
+                            </div>
+                      {% endif %}
+                      </div>
+                      <div class="component">
+                        <div class="nav nav-pills nav-justified bg-light sticky-top">
+                            <div class="nav-item">
+                                <a href="{% url 'index' %}" class="nav-link active" target="_blank">首页</a>
+                            </div>
+                            {% for category in category_list %}
+                                <div class="nav-item">
+                                    <a href="#" class="nav-link" target="_blank">{{ category.name }}</a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                      </div>
+
+                {% endblock %}
+
+                </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-8">
+
+                {% block center_content %}
+
+
+                        <!--幻灯片-->
+                        {% block ad %}
+                        {% endblock %}
+
+                        <!--文章主题内容位置-->
+                        {% block content %}
+                        {% endblock %}
+
+                        <!--分页器位置-->
+                        {% block pagination %}
+                        {% endblock %}
+
+                    </div>
+
+                {% endblock %}
+
+                    <div class="col-4">
+                <!--右边框内容 -->
+                {% block side_content %}
+
+                      {% block pro_message %}
+                        <div class="tit01">
+                          <h3>关注我</h3>
+                          <div class="gzwm">
+                            <ul>
+                              <li><a class="xlwb" href="#" target="_blank">新浪微博</a></li>
+                              <li><a class="txwb" href="#" target="_blank">腾讯微博</a></li>
+                              <li><a class="rss" href="portal.php?mod=rss" target="_blank">RSS</a></li>
+                              <li><a class="wx" href="mailto:admin@admin.com">邮箱</a></li>
+                            </ul>
+                          </div>
+                        </div>
+                        <!--tit01 end-->
+                      {% endblock %}
+
+
+                      {% block select %}
+                          <div class="component">
+                          <!-- 使用 Bootstrap 的手风琴样式，替换掉之前显示样式 -->
+                          <div id="accordion">
+
+                              <div class="card">
+                                  <div class="card-header d-flex justify-content-between align-items-center">
+                                      <button class="btn btn-outline-secondary" data-target="#collapse-1" data-toggle="collapse">浏览排行</button>
+                                      <span class="badge badge-pill badge-primary">5</span>
+                                  </div>
+                                  <div class="collapse show" id="collapse-1" data-parent="#accordion">
+                                      <div class="card-body">
+                                          <div style="display: block;" class="bd bd-news" >
+                                  <ul>
+                                    <li><a href="/" target="_blank">住在手机里的朋友</a></li>
+                                    <li><a href="/" target="_blank">教你怎样用欠费手机拨打电话</a></li>
+                                    <li><a href="/" target="_blank">原来以为，一个人的勇敢是，删掉他的手机号码...</a></li>
+                                    <li><a href="/" target="_blank">手机的16个惊人小秘密，据说99.999%的人都不知</a></li>
+                                    <li><a href="/" target="_blank">你面对的是生活而不是手机</a></li>
+                                    <li><a href="/" target="_blank">豪雅手机正式发布! 在法国全手工打造的奢侈品</a></li>
+                                  </ul>
+                                </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="card">
+                                  <div class="card-header">
+                                      <button class="btn btn-outline-secondary" data-target="#collapse-2" data-toggle="collapse">评论排行</button>
+                                  </div>
+                                  <div class="collapse" id="collapse-2" data-parent="#accordion">
+                                      <div class="card-body">
+                                          <ol>
+                                              {% for article in article_comment_list %}
+                                                  <li><a href="/" target="_blank">{{ article.title }}</a></li>
+                                                  {% if not forloop.last %}
+                                                  <div class="dropdown-divider"></div>
+                                                  {% endif %}
+                                              {% endfor %}
+                                          </ol>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="card">
+                                  <div class="card-header">
+                                      <button class="btn btn-outline-secondary" data-target="#collapse-3" data-toggle="collapse">站长推荐</button>
+                                  </div>
+                                  <div class="collapse" id="collapse-3" data-parent="#accordion">
+                                      <div class="card-body">
+                                          <ol>
+                                              <li><a href="/" target="_blank">手机的16个惊人小秘密，据说99.999%的人都不知</a></li>
+                                              <div class="dropdown-divider"></div>
+                                              <li><a href="/" target="_blank">你面对的是生活而不是手机</a></li>
+                                              <div class="dropdown-divider"></div>
+                                              <li><a href="/" target="_blank">住在手机里的朋友</a></li>
+                                              <div class="dropdown-divider"></div>
+                                              <li><a href="/" target="_blank">豪雅手机正式发布! 在法国全手工打造的奢侈品</a></li>
+                                              <div class="dropdown-divider"></div>
+                                              <li><a href="/" target="_blank">教你怎样用欠费手机拨打电话</a></li>
+                                              <div class="dropdown-divider"></div>
+                                              <li><a href="/" target="_blank">原来以为，一个人的勇敢是，删掉他的手机号码...</a></li>
+                                              <div class="dropdown-divider"></div>
+                                          </ol>
+                                      </div>
+                                  </div>
+                              </div>
+
+                          </div>
+                          </div>
+                      {% endblock %}
+
+
+                      {% block cloud %}
+                            <div class="">
+                              <h3>标签云</h3>
+                                  {% for tag in tag_list %}
+                                          <a href="" class="badge badge-primary text-light font-weight-bolder {% if not forloop.last %}mb-2{% endif %}" style="font-size:18px">
+                                              {{ tag.name }}
+                                          </a>
+
+                                  {% endfor %}
+                            </div>
+                        {% endblock %}
+
+
+                      {% block guidang %}
+                            <div class="tuwen">
+                              <h3>文章归档</h3>
+                              <ul>
+                                  {% for date_time in date_list %}
+                                <li>
+                                  <p>
+                                      <span class="tutime font-size-18">
+                                          <a href='{% url 'archive' %}?year={{ date_time |slice:':4' }}&month={{ date_time |slice:'5:7' }}'>{{ date_time }}文章归档</a>
+                                      </span>
+                                  </p>
+                                </li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                        {% endblock %}
+
+                      {% block links %}
+                            <div class="links">
+                              <h3>友情链接</h3>
+                              <ul>
+                                  {% for link in link_list %}
+                                      <li><a href="{{ link.callback_url }}">{{ link.title }}</a></li>
+                                  {% endfor %}
+                              </ul>
+                            </div>
+                       {% endblock %}
+
+                      </div>
+
+                      <!--r_box end -->
+                {% endblock %}
+                    </div>
+            </div>
+
+        {% block footer %}
+             <footer class="mt-5">
+             <p class="text-light">某某某的个人博客 蜀ICP备xxxxxxx号-1</p>
+             <div id="tbox"> <a id="togbook" href="/"></a> <a id="gotop" href="javascript:void(0)"></a> </div>
+            </footer>
+        {% endblock %}
+
+        </body>
+    {% endblock %}
+    {% endcache %}
+
+</html>
