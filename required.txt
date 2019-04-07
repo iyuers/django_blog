@@ -1,0 +1,5 @@
+Django==2.1.7
+django-summernote==0.8.11.4
+Pillow==5.4.1
+PyMySQL==0.9.3
+pytz==2018.9
